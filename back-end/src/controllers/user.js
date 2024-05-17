@@ -217,8 +217,17 @@ controller.login = async function (req, res) {
       { expiresIn: "24h" } // Prazo de validade do token
     );
 
+    res.cookie(process.env.AUTH_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      path: '/',
+      maxAge: 24 * 60 * 60 * 1000
+    })
     // Retorna o token com status HTTP 200: OK (implícito)
-    res.send({ token });
+    // res.send({ token });
+    res.status(204).end()
+
   } catch (error) {
     console.error(error);
     // HTTP 500: Internal Server Error
